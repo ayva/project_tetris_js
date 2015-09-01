@@ -19,7 +19,7 @@ var Renderer = function(canvas){
 
   this.drawBlock = function(block){
     //dir is the next position
-    
+
     function eachblock(block.type, block.position.x, block.position.y, dir, fn) {
       var bit, result, row = 0, col = 0, blocks = type.blocks[dir];
       for(bit = 0x8000 ; bit > 0 ; bit = bit >> 1) {
@@ -102,3 +102,4 @@ var controller = {
 //var renderer = new Renderer($("canvas"));
 
 controller.init();
+
