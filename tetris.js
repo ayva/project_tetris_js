@@ -20,27 +20,8 @@ var Renderer = function(canvas){
   this.drawBlock = function(block){
     //dir is the next position
 
-    function eachblock(block.type, block.position.x, block.position.y, dir, fn) {
-      var bit, result, row = 0, col = 0, blocks = type.blocks[dir];
-      for(bit = 0x8000 ; bit > 0 ; bit = bit >> 1) {
-        if (blocks & bit) {
-          fn(x + col, y + row);
-        }
-        if (++col === 4) {
-          col = 0;
-          ++row;
-      }
-    }
-  };
-    this.canvas.drawRect({
-      fillStyle: "white",
-      x: 0,
-      y: 0,
-      width: block.width,
-      height: block.height
-    });
-  };
 
+  };
 
 };
 
@@ -53,12 +34,52 @@ var Block = function(){
   this.position = {
     x: renderer.width/2,
     y: renderer.height
-  }
+  };
 
-  this.velocity = 0
+  this.velocity = 0;
   
 
-  this.type = model.takeSampleBlock(Math.ceil(Math.random()*7))
+  this.type = model.takeSampleBlock(Math.ceil(Math.random()*7));
+
+  this.eachblock = function(type, x, y, dir, fn) {
+      var bit, result, row = 0, col = 0, blocks = type.blocks[dir];
+      for(bit = 0x8000 ; bit > 0 ; bit = bit >> 1) {
+        if (blocks & bit) {
+          fn(x + col, y + row);
+        }
+        if (++col === 4) {
+          col = 0;
+          ++row;
+      }
+    }
+  };
+
+  this.occupied = function(type, x, y, dir) {
+    var result = false;
+    this.eachblock(type, x, y, dir, function(x, y) {
+      if ((x < 0) || (x >= nx) || (y < 0) || (y >= ny) || getBlock(x,y))
+        result = true;
+    });
+    return result;
+
+  };
+
+  this.unoccupied = function(type, x, y, dir) {
+    return !occupied(type, x, y, dir);
+  };
+
+  //returns true if space is occupied by another blokc
+  this.getBlock = function(x, y){
+    
+    for(var i = 0; i < model.blocks.length; i++){
+      if(model.blocks[i].position.x === x || model.blocks[i].position.y === y){
+        return true;
+      }
+      else{
+        return false;
+      }
+    }
+  };
 
 };
 
@@ -69,10 +90,10 @@ var model = {
   currentBlock: {},
 
   createBlock: function(){
-    var block = new Block()
-    blocks.push(block)
-    model.currentBlock = block
-  }
+    var block = new Block();
+    blocks.push(block);
+    model.currentBlock = block;
+  },
 
   sampleBlocks: {
     1: { blocks: [0x0F00, 0x2222, 0x00F0, 0x4444], color: 'cyan'   },
@@ -96,7 +117,9 @@ var controller = {
     var renderer = new Renderer($("canvas"));
     renderer.drawBg();
     renderer.drawBlock();
-  }
+  },
+
+   
 };
 
 //var renderer = new Renderer($("canvas"));
