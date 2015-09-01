@@ -5,39 +5,52 @@
 var Renderer = function(canvas){
   // Cache DOM element
   this.canvas = $(canvas);
-
+  var ctx = $(canvas)[0].getContext("2d");
+  
   this.drawBg = function(){
     this.canvas.drawRect({
       fillStyle: "black",
       x:0,
       y:0,
       width: this.canvas.width(),
-      height:this.canvas.height(),
+      height: this.canvas.height(),
       fromCenter: false,
     });
   };
 
-  this.drawBlock = function(block){
+  this.drawPiece = function(ctx, block){
     //dir is the next position
+    var x = block.position.x
+    var y = block.position.y
+    var that = this
 
+    block.eachblock(block.type, x, y, dir=0, function(x,y){that.drawblock(ctx, x, y, block.type.color);})
 
   };
+  this.drawblock = function(ctx,x,y,color){
 
+    this.canvas.drawRect({
+      fillStyle: color,
+      x: x,
+      y: y,
+      width:  35,
+      height: 35,
+      fromCenter: false,
+    });
+  }
 };
 
 
 var Block = function(){
 
-  console.log("render: " + Renderer.canvas);
-  console.log(this);
 
   this.position = {
-    x: renderer.width/2,
-    y: renderer.height
+    x: 350,
+    y: 350
   };
 
   this.velocity = 0;
-  
+  this.dir = 0;
 
   this.type = model.takeSampleBlock(Math.ceil(Math.random()*7));
 
@@ -91,7 +104,7 @@ var model = {
 
   createBlock: function(){
     var block = new Block();
-    blocks.push(block);
+    model.blocks.push(block);
     model.currentBlock = block;
   },
 
@@ -103,20 +116,65 @@ var model = {
     5: { blocks: [0x06C0, 0x8C40, 0x6C00, 0x4620], color: 'green'  },
     6: { blocks: [0x0E40, 0x4C40, 0x4E00, 0x4640], color: 'purple' },
     7: { blocks: [0x0C60, 0x4C80, 0xC600, 0x2640], color: 'red'    }
-  }
+  },
+
   takeSampleBlock: function(number){
-    return sampleBlocks[number]
+    return model.sampleBlocks[number]
   }
 
 };
 
 var controller = {
+  dir: 0,
+
+  moveLeft: function(){
+    console.log("Moved left")
+    model.currentBlock.position.x -= 35;
+    console.log(currentBlock.position.x)
+  },
+
+  rotatePiece: function(){
+    console.log("Rotated")
+    console.log(currentBlock.dir)
+    currentBlock.dir+=1
+    if (currentBlock.dir>3) {
+      currentBlock.dir=0
+    }
+    console.log(currentBlock.dir)
+  },
+
+  moveRight: function(){
+    console.log("Move right")
+    currentBlock.position.x += 35;
+    console.log( currentBlock.position.x)
+  },
+
+  moveDown: function(){
+    currentBlock.position.y += 35;
+  },
+  
 
   score : 0,
+
   init : function(){
+    var keys= {  37: this.moveLeft,
+          38: this.rotatePiece,
+          39: this.moveRight,
+          40: this.moveDown
+        }
     var renderer = new Renderer($("canvas"));
-    renderer.drawBg();
-    renderer.drawBlock();
+
+    model.createBlock()
+    setInterval(function(){
+      renderer.drawBg();
+      renderer.drawPiece(renderer.ctx, model.currentBlock) }
+    , 100)
+
+    $(document).keydown(function(e){
+      if (keys[e.keyCode]){
+        keys[e.keyCode]();
+      }
+    })
   },
 
    
