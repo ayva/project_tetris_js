@@ -1,8 +1,10 @@
 var Block = function(){
   //Size of 1 block is 40 px
-  width = Renderer.canvas.width()/10
-  height = Renderer.canvas.height()/20
-}
+  console.log("render: " + Renderer.canvas);
+  console.log(this);
+  this.width = Renderer.canvas.width()/10;
+  this.height = Renderer.canvas.height()/20;
+};
 
 
 //View
@@ -18,9 +20,36 @@ var Renderer = function(canvas){
       width: this.canvas.width(),
       height:this.canvas.height(),
       fromCenter: false,
-    })
+    });
   };
-}
+
+  this.drawBlock = function(){
+    var block = new Block();
+    
+    this.canvas.drawRect({
+      fillStyle: "white",
+      x: 0,
+      y: 0,
+      width: block.width,
+      height: block.height
+    });
+  };
+
+
+};
+
+var model = {
+  
+  currentBlock: {},
+
+  createBlock: function(){
+    currentBlock = new Block();
+    var width = 20px;
+    var height = 20px;
+  }
+
+
+};
 
 var controller = {
 
@@ -28,8 +57,9 @@ var controller = {
   init : function(){
     var renderer = new Renderer($("canvas"));
     renderer.drawBg();
+    renderer.drawBlock();
   }
-}
+};
 
 //var renderer = new Renderer($("canvas"));
 
