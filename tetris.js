@@ -1,10 +1,4 @@
-var Block = function(){
-  //Size of 1 block is 40 px
-  console.log("render: " + Renderer.canvas);
-  console.log(this);
-  this.width = Renderer.canvas.width()/10;
-  this.height = Renderer.canvas.height()/20;
-};
+
 
 
 //View
@@ -23,9 +17,21 @@ var Renderer = function(canvas){
     });
   };
 
-  this.drawBlock = function(){
-    var block = new Block();
+  this.drawBlock = function(block){
+    //dir is the next position
     
+    function eachblock(block.type, block.position.x, block.position.y, dir, fn) {
+      var bit, result, row = 0, col = 0, blocks = type.blocks[dir];
+      for(bit = 0x8000 ; bit > 0 ; bit = bit >> 1) {
+        if (blocks & bit) {
+          fn(x + col, y + row);
+        }
+        if (++col === 4) {
+          col = 0;
+          ++row;
+      }
+    }
+  };
     this.canvas.drawRect({
       fillStyle: "white",
       x: 0,
@@ -38,16 +44,48 @@ var Renderer = function(canvas){
 
 };
 
-var model = {
+
+var Block = function(){
+
+  console.log("render: " + Renderer.canvas);
+  console.log(this);
+
+  this.position = {
+    x: renderer.width/2,
+    y: renderer.height
+  }
+
+  this.velocity = 0
   
+
+  this.type = model.takeSampleBlock(Math.ceil(Math.random()*7))
+
+};
+
+
+
+var model = {
+  blocks: [],
   currentBlock: {},
 
   createBlock: function(){
-    currentBlock = new Block();
-    var width = 20px;
-    var height = 20px;
+    var block = new Block()
+    blocks.push(block)
+    model.currentBlock = block
   }
 
+  sampleBlocks: {
+    1: { blocks: [0x0F00, 0x2222, 0x00F0, 0x4444], color: 'cyan'   },
+    2: { blocks: [0x44C0, 0x8E00, 0x6440, 0x0E20], color: 'blue'   },
+    3: { blocks: [0x4460, 0x0E80, 0xC440, 0x2E00], color: 'orange' },
+    4: { blocks: [0xCC00, 0xCC00, 0xCC00, 0xCC00], color: 'yellow' },
+    5: { blocks: [0x06C0, 0x8C40, 0x6C00, 0x4620], color: 'green'  },
+    6: { blocks: [0x0E40, 0x4C40, 0x4E00, 0x4640], color: 'purple' },
+    7: { blocks: [0x0C60, 0x4C80, 0xC600, 0x2640], color: 'red'    }
+  }
+  takeSampleBlock: function(number){
+    return sampleBlocks[number]
+  }
 
 };
 
