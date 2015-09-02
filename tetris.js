@@ -165,11 +165,8 @@ var model = {
     var block = new Block();
     model.blocks.push(block);
     model.currentBlock = block;
-<<<<<<< HEAD
-    console.log(model.currentBlock.type)
-=======
+
     console.log(model.currentBlock)
->>>>>>> 0dce58b0e6cbed80e47cfccb41b709070ac30600
   },
 
   sampleBlocks: {
@@ -194,47 +191,6 @@ var model = {
 var controller = (function(){
   var dir = 0
 
-<<<<<<< HEAD
-  moveLeft: function(){
-    model.currentBlock.position.x -= 35;
-  },
-
-  rotatePiece: function(){
-    console.log(model.currentBlock.dir);
-    model.currentBlock.dir+=1;
-    if (model.currentBlock.dir>3) {
-      model.currentBlock.dir=0;
-    }
-  },
-
-  moveRight: function(){
-    model.currentBlock.position.x += 35;
-  },
-
-  moveDown: function(){
-    model.currentBlock.position.y += 35;
-  },
-  
-
-  score : 0,
-
-  init : function(){
-    var ctx = $(canvas)[0].getContext("2d")
-    var keys= {  37: this.moveLeft,
-          38: this.rotatePiece,
-          39: this.moveRight,
-          40: this.moveDown
-        };
-    
-    var renderer = new Renderer($("canvas"));
-
-    model.createBlock();
-    
-    setInterval(function(){
-      renderer.drawBg();
-      renderer.drawPiece(ctx, model.currentBlock);
-    }, 100);
-=======
   function moveLeft(){
     console.log("Moved left")
     model.currentBlock.position.x -= 35;
@@ -269,22 +225,16 @@ var controller = (function(){
           40: moveDown
         };
   function init(){
->>>>>>> 0dce58b0e6cbed80e47cfccb41b709070ac30600
-
     $(document).keydown(function(e){
       if (keys[e.keyCode]){
         keys[e.keyCode]();
       }
-<<<<<<< HEAD
-    });
-  },
-=======
+
     })
   };
   function play(){
     renderer.init();
     controller.init();
->>>>>>> 0dce58b0e6cbed80e47cfccb41b709070ac30600
 
   };
   return {
