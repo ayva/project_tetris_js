@@ -12,15 +12,7 @@ var renderer = (function(){
     model.createBlock();
     setInterval(function(){
       renderer.drawBg();
-      var dir = model.currentBlock.dir;
-      console.log(model.currentBlock.type.blocks[dir])
-      var piece = convertToArray(model.currentBlock.type.blocks[dir]);
-      // console.log(model.currentBlock.position.x)
-      console.log(model.currentBlock.type.color)
-      // console.log(model.currentBlock.position.y)
-      drawArray(piece, model.currentBlock.position.x, model.currentBlock.position.y, "green")
-
-      // renderer.drawPiece(model.currentBlock.type, model.currentBlock.position.x, model.currentBlock.position.y, model.currentBlock.dir) 
+      renderer.drawPiece(model.currentBlock.type, model.currentBlock.position.x, model.currentBlock.position.y, model.currentBlock.dir) 
     }
     , 100)
   }
@@ -28,23 +20,6 @@ var renderer = (function(){
 
   //var ctx = canvas[0].getContext("2d");
 
-  function  convertToArray(hex){
-    console.log(hex)
-
-  };
-
-  function drawArray(piece, x,y,color){
-    // console.log("drawing")
-    // console.log(canvas.height()/20/4)
-    // console.log(canvas.width()/10/4)
-    //var piece = [[0,0,0,0],[1,1,1,1],[0,0,0,0],[0,0,0,0]]
-
-    for(var row=0; row < piece.length; row++){
-      for(var col=0; col < piece.length; col++){
-        if(piece[row][col]===1) {drawBlock(100+col*canvas.width()/10/4,100+row*canvas.height()/20/4, color)}
-      }
-    }
-  };
 
   function drawBg(){
     canvas.drawRect({
@@ -68,7 +43,7 @@ var renderer = (function(){
       var bit, result, row = 0, col = 0, blocks = type.blocks[dir];
       for(bit = 0x8000 ; bit > 0 ; bit = bit >> 1) {
         if (blocks & bit) {
-          fn(x + col, y + row);
+          fn(x + col*canvas.width()/10/4, y + row*canvas.height()/20/4);
         }
         if (++col === 4) {
           col = 0;
