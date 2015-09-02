@@ -3,44 +3,46 @@ var Game = Game || {};
 
 Game.Controller = (function(){
   
-  var dir = 0;
 
   function moveLeft(){
-    console.log("Moved left");
-    //if in boundrar?
-      //
-     model.currentBlock.position.x -= 35;
-      
+
+    if (Game.Board.unoccupied(-Game.Renderer.canvas.width()*0.4/4, 0,0)){
+     Game.Model.currentBlock.position.x -= (Game.Renderer.canvas.width()*0.4)/4;
+     } 
   }
 
   function rotatePiece(){
-    
-    model.currentBlock.dir+=1
-    if (model.currentBlock.dir>3) {
-      model.currentBlock.dir=0
+    if (Game.Board.unoccupied(0, 0, 1)){
+      Game.Model.currentBlock.dir+=1
+      if (Game.Model.currentBlock.dir>3) {
+        Game.Model.currentBlock.dir=0
+      } 
     }
     
   }
 
   function moveRight(){
-    console.log("Move right")
-    //checkbound
-    model.currentBlock.position.x += 35;
     
+    if (Game.Board.unoccupied(Game.Renderer.canvas.width()*0.4/4, 0,0)){
+      Game.Model.currentBlock.position.x += (Game.Renderer.canvas.width()*0.4)/4;
+    }
   }
 
   function moveDown(){
-    //check bound
-    model.currentBlock.position.y += 35;
+    if (Game.Board.unoccupied(0, 0, 1)){
+      Game.Model.currentBlock.position.y += (Game.Renderer.canvas.height()*0.2)/4;
+    }
   }
   
 
   var score = 0
-  var keys = {  37: moveLeft,
-          38: rotatePiece,
-          39: moveRight,
-          40: moveDown
-        };
+  var keys = {  
+                37: moveLeft,
+                38: rotatePiece,
+                39: moveRight,
+                40: moveDown
+              };
+
   function init(){
     $(document).keydown(function(e){
       if (keys[e.keyCode]){
@@ -48,17 +50,11 @@ Game.Controller = (function(){
       }
 
     })
-  };
-  
-  function play(){
-    renderer.init();
-    controller.init();
+  }
 
-  };
-  
-  return {
-    init: init,
-    play: play,
+  return{
+    init: init
+  }
 
-  };
+  
 })();

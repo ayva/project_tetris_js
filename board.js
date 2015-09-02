@@ -1,21 +1,32 @@
 
 var Game = Game || {};
 
-Game.BoardModule = (function(){
+Game.Board = (function(){
 
+  //Field keeps track of occupied coordinates
+  var field = []
 
-  var occupied = function(type, x, y, dir) {
+  var occupied = function(shiftx,shifty,dir) {
+    var dir = Game.Model.currentBlock.dir+dir
+    var type = Game.Model.currentBlock.type
+    var x = Game.Model.currentBlock.position.x+shiftx
+    var y = Game.Model.currentBlock.position.y+shifty
     var result = false;
-    this.eachblock(type, x, y, dir, function(x, y) {
-      if ((x < 0) || (x >= 400) || (y < 0) || (y >= 700) || getBlock(x,y))
+
+    Game.Renderer.eachblock(type, x, y, dir, function(x, y) {
+      console.log(x, y)
+      console.log(result)
+      if ((x < 0) || (x >= 400)  || (y > 700)){
         result = true;
+      }
+        
     });
     return result;
 
   };
 
-  var unoccupied = function(type, x, y, dir) {
-    return !occupied(type, x, y, dir);
+  var unoccupied = function(shiftx,shifty,dir) {
+    return !occupied(shiftx,shifty,dir);
   };
 
   //returns true if space is occupied by another blokc
@@ -34,5 +45,10 @@ Game.BoardModule = (function(){
 
     return (blocks && blocks[x] ? blocks[x][y] : null);
   };
+
+  return {
+    occupied: occupied,
+    unoccupied: unoccupied,
+  }
 
 })();

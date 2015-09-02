@@ -1,17 +1,17 @@
 
 var Game = Game || {};
 
-Game.renderer = (function(){
+Game.Renderer = (function(){
  
-  var canvas;
+  var canvas = $("#canvas");
 
   function init(){
-    canvas = $("#canvas");
+    //canvas = $("#canvas");
 
-    model.createBlock();
+    Game.Model.createBlock();
     setInterval(function(){
-      renderer.drawBg();
-      renderer.drawPiece(model.currentBlock.type, model.currentBlock.position.x, model.currentBlock.position.y, model.currentBlock.dir) 
+      drawBg();
+      drawPiece(Game.Model.currentBlock.type, Game.Model.currentBlock.position.x, Game.Model.currentBlock.position.y, Game.Model.currentBlock.dir) 
     }
     , 100)
   }
@@ -33,7 +33,7 @@ Game.renderer = (function(){
 
 
   function drawPiece(type, x, y, dir){
-    eachblock(type, x, y, dir, function(x,y){drawBlock( x, y, model.currentBlock.type.color);})
+    eachblock(type, x, y, dir, function(x,y){drawBlock( x, y, Game.Model.currentBlock.type.color);})
 
   };
 
@@ -52,7 +52,7 @@ Game.renderer = (function(){
     };
 
   function drawBlock(x,y,color){
-      console.log("drawing block")
+   
     canvas.drawRect({
       strokeStyle: 'white',
       strokeWidth: 2,
@@ -66,17 +66,21 @@ Game.renderer = (function(){
   };
 
   return {
+    canvas: canvas,
     init: init,
     drawPiece: drawPiece,
     drawBlock: drawBlock,
-    drawBg: drawBg
+    drawBg: drawBg,
+    eachblock: eachblock
   };
 })();
 
 //var renderer = new renderer();
 $(document).ready(function(){
+    //Draw Board and piece
+    Game.Renderer.init();
+    //Start listener
     Game.Controller.init();
-    Game.Controller.play();
   })
 
 
