@@ -1,55 +1,103 @@
 
 
 
-//View
-var Renderer = function(canvas){
-  // Cache DOM element
-  this.canvas = $(canvas);
-  var ctx = $(canvas)[0].getContext("2d");
+
+var renderer = (function(){
+ 
+  var canvas;
+
+  function init(){
+    canvas = $("#canvas");
+
+    model.createBlock();
+    setInterval(function(){
+      renderer.drawBg();
+      var dir = model.currentBlock.dir;
+      console.log(model.currentBlock.type.blocks[dir])
+      var piece = convertToArray(model.currentBlock.type.blocks[dir]);
+      // console.log(model.currentBlock.position.x)
+      console.log(model.currentBlock.type.color)
+      // console.log(model.currentBlock.position.y)
+      drawArray(piece, model.currentBlock.position.x, model.currentBlock.position.y, "green")
+
+      // renderer.drawPiece(model.currentBlock.type, model.currentBlock.position.x, model.currentBlock.position.y, model.currentBlock.dir) 
+    }
+    , 100)
+  }
   
-  this.drawBg = function(){
-    this.canvas.drawRect({
+
+  //var ctx = canvas[0].getContext("2d");
+
+  function  convertToArray(hex){
+    console.log(hex)
+
+  };
+
+  function drawArray(piece, x,y,color){
+    // console.log("drawing")
+    // console.log(canvas.height()/20/4)
+    // console.log(canvas.width()/10/4)
+    //var piece = [[0,0,0,0],[1,1,1,1],[0,0,0,0],[0,0,0,0]]
+
+    for(var row=0; row < piece.length; row++){
+      for(var col=0; col < piece.length; col++){
+        if(piece[row][col]===1) {drawBlock(100+col*canvas.width()/10/4,100+row*canvas.height()/20/4, color)}
+      }
+    }
+  };
+
+  function drawBg(){
+    canvas.drawRect({
       fillStyle: "black",
       x:0,
       y:0,
-      width: this.canvas.width(),
-      height: this.canvas.height(),
+      width: canvas.width(),
+      height: canvas.height(),
       fromCenter: false,
     });
   };
 
-  this.drawPiece = function(ctx, block){
-    //dir is the next position
-    var x = block.position.x;
-    var y = block.position.y;
-    var that = this;
 
-    block.eachblock(block.type, x, y, block.dir, function(x, y){
-      console.log('x:'+x+', y: '+y);
-      drawblock(ctx, x, y, block.type.color);});
-
-    // console.log(that);
-    // console.log('x: '+x)
-    // console.log('y: '+y)
+  function drawPiece(type, x, y, dir){
+    eachblock(type, x, y, dir, function(x,y){drawBlock( x, y, model.currentBlock.type.color);})
 
   };
-  var drawblock = function(ctx,x,y,color){
 
-    // this.canvas.drawRect({
-    //   fillStyle: color,
-    //   x: x,
-    //   y: y,
-    //   width:  35,
-    //   height: 35,
-    //   fromCenter: false,
-    // });
-    ctx.fillStyle = color;
-    // ctx.strokeStyle = "#FF0000";
-    ctx.fillRect(x, y, 10, 10);
-    // ctx.strokeRect(x, y, 50, 50);
+  function eachblock(type, x, y, dir, fn) {
+     
+      var bit, result, row = 0, col = 0, blocks = type.blocks[dir];
+      for(bit = 0x8000 ; bit > 0 ; bit = bit >> 1) {
+        if (blocks & bit) {
+          fn(x + col, y + row);
+        }
+        if (++col === 4) {
+          col = 0;
+          ++row;
+        }
+      }
+    };
+
+  function drawBlock(x,y,color){
+      console.log("drawing block")
+    canvas.drawRect({
+      strokeStyle: 'white',
+      strokeWidth: 2,
+      fillStyle: color,
+      x: x,
+      y: y,
+      width:  canvas.width()/10/4,
+      height: canvas.height()/20/4,
+      fromCenter: false,
+    });
   };
-};
 
+  return {
+    init: init,
+    drawPiece: drawPiece,
+    drawBlock: drawBlock,
+    drawBg: drawBg
+  };
+})();
 
 var Block = function(){
 
@@ -117,7 +165,11 @@ var model = {
     var block = new Block();
     model.blocks.push(block);
     model.currentBlock = block;
+<<<<<<< HEAD
     console.log(model.currentBlock.type)
+=======
+    console.log(model.currentBlock)
+>>>>>>> 0dce58b0e6cbed80e47cfccb41b709070ac30600
   },
 
   sampleBlocks: {
@@ -131,6 +183,7 @@ var model = {
     7: { blocks: [0x0C60, 0x4C80, 0xC600, 0x2640], color: 'red'    }
   },
 
+
   takeSampleBlock: function(number){
     // return model.sampleBlocks[number]
     return model.sampleBlocks[1]
@@ -138,9 +191,10 @@ var model = {
 
 };
 
-var controller = {
-  dir: 0,
+var controller = (function(){
+  var dir = 0
 
+<<<<<<< HEAD
   moveLeft: function(){
     model.currentBlock.position.x -= 35;
   },
@@ -180,18 +234,74 @@ var controller = {
       renderer.drawBg();
       renderer.drawPiece(ctx, model.currentBlock);
     }, 100);
+=======
+  function moveLeft(){
+    console.log("Moved left")
+    model.currentBlock.position.x -= 35;
+    
+  }
+
+  function rotatePiece(){
+    console.log("Rotated")
+    
+    model.currentBlock.dir+=1
+    if (model.currentBlock.dir>3) {
+      model.currentBlock.dir=0
+    }
+    
+  }
+
+  function moveRight(){
+    console.log("Move right")
+    model.currentBlock.position.x += 35;
+    
+  }
+
+  function moveDown(){
+    model.currentBlock.position.y += 35;
+  }
+  
+
+  var score = 0
+  var keys = {  37: moveLeft,
+          38: rotatePiece,
+          39: moveRight,
+          40: moveDown
+        };
+  function init(){
+>>>>>>> 0dce58b0e6cbed80e47cfccb41b709070ac30600
 
     $(document).keydown(function(e){
       if (keys[e.keyCode]){
         keys[e.keyCode]();
       }
+<<<<<<< HEAD
     });
   },
+=======
+    })
+  };
+  function play(){
+    renderer.init();
+    controller.init();
+>>>>>>> 0dce58b0e6cbed80e47cfccb41b709070ac30600
+
+  };
+  return {
+    init: init,
+    play: play,
+
+  };
+   
+})();
+
 
    
-};
 
-//var renderer = new Renderer($("canvas"));
 
-controller.init();
+//var renderer = new renderer();
+$(document).ready(function(){
+    controller.play();
+  })
+
 
