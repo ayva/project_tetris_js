@@ -7,7 +7,23 @@ Game.Board = (function(){
   var field = [];
   var needNewBlock = false;
 
-  var occupied = function(shiftx,shifty,dir) {
+
+  var hasBlock = function(x,y){
+  
+    for(var i=0; i < Game.Model.blocks.length; i++){
+        console.log("Looking for" + x,y)
+        console.log("Checked" + Game.Model.blocks[i].position.x,Game.Model.blocks[i].position.y)
+      if(Game.Model.blocks[i].position.x === x && Game.Model.blocks[i].position.y === y) { 
+      
+            Game.Board.needNewBlock = true;
+        return true 
+      }
+    }
+    return false
+    
+  }
+
+  var occupied = function(shiftx, shifty, dir) {
     var dir = Game.Model.currentBlock.dir+dir
     var type = Game.Model.currentBlock.type
     var x = Game.Model.currentBlock.position.x+shiftx
@@ -18,14 +34,11 @@ Game.Board = (function(){
     Game.Renderer.eachblock(type, x, y, dir, function(x, y) {
 
       console.log(x, y, result)
-
-      if ((x < 0) || (x >= 400)  || (y > 700)){
+      if ((x < 0) || (x >= 400)  || (y >= 700) || hasBlock(x,y)){
         result = true;
       }
-
-      if(y === 700){
-        // Game.Model.blocks.push(Game.Model.currentBlock);
-        // Game.Model.createBlock();
+      if(y >= 700){
+        console.log("needNeBlock" + Game.Board.needNewBlock)
         Game.Board.needNewBlock = true;
       }
     });
@@ -37,22 +50,7 @@ Game.Board = (function(){
     return !occupied(shiftx,shifty,dir);
   };
 
-  //returns true if space is occupied by another blokc
-  // var getBlock = function(x, y){
-    
-  //   for(var i = 0; i < model.blocks.length; i++){
-  //     if(model.blocks[i].position.x === x || model.blocks[i].position.y === y){
-  //       return true;
-  //     }
-  //     else{
-  //       return false;
-  //     }
-  //   }
-  // };
-  var getBlock = function(x, y){
 
-    return (blocks && blocks[x] ? blocks[x][y] : null);
-  };
 
   return {
     occupied: occupied,

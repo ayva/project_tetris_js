@@ -24,6 +24,7 @@ Game.Model = (function(){
   model.createBlock = function(){
     var block = new Block();
     model.blocks.push(block);
+    console.log(model.blocks);
     model.currentBlock = block;
     console.log("called create block");
   };
@@ -41,7 +42,6 @@ Game.Model = (function(){
 
   model.takeSampleBlock = function(number){
     return model.sampleBlocks[number];
-    // return model.sampleBlocks[1]
   };
 
   return model;

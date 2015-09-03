@@ -6,17 +6,17 @@ Game.Renderer = (function(){
   var canvas = $("#canvas");
 
   function init(){
-    //canvas = $("#canvas");
+
 
     Game.Model.createBlock();
     setInterval(function(){
 
       drawBg();
-      // Game.Controller.NeedNewBlock();
+
       for(var i = 0; i < Game.Model.blocks.length; i++){
         drawPiece(Game.Model.blocks[i].type, Game.Model.blocks[i].position.x, Game.Model.blocks[i].position.y, Game.Model.blocks[i].dir, Game.Model.blocks[i].type.color) ;
       }
-      // drawPiece(Game.Model.currentBlock.type, Game.Model.currentBlock.position.x, Game.Model.currentBlock.position.y, Game.Model.currentBlock.dir, Game.Model.currentBlock.type.color);
+
     }
     , 100)
   }
@@ -47,7 +47,7 @@ Game.Renderer = (function(){
       var bit, result, row = 0, col = 0, blocks = type.blocks[dir];
       for(bit = 0x8000 ; bit > 0 ; bit = bit >> 1) {
         if (blocks & bit) {
-          fn(x + col*(1+(canvas.width()*0.4)/4), y + (1+row*(canvas.height()*0.2)/4));
+          fn(x + col*((canvas.width()*0.4)/4), y + (row*(canvas.height()*0.2)/4));
         }
         if (++col === 4) {
           col = 0;
