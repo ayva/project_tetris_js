@@ -4,10 +4,12 @@ var Game = Game || {};
 Game.Model = (function(){
 
   function Block(){
+    
     this.position = {
-    x: Game.Renderer.canvas.width()*0.4/4*4 ,
-    y: 0
+      x: Game.Renderer.canvas.width()*0.4/4*4,
+      y: 0
     };
+
     this.velocity = 0;
     this.dir = 0;
 
@@ -23,8 +25,7 @@ Game.Model = (function(){
     var block = new Block();
     model.blocks.push(block);
     model.currentBlock = block;
-
-    console.log(model.currentBlock);
+    console.log("called create block");
   };
 
   model.sampleBlocks = {

@@ -7,13 +7,13 @@ Game.Model = (function(){
   model.blocks = [];
   model.currentBlock = {};
 
-  model.createBlock = function(){
-    var block = new Block();
-    model.blocks.push(block);
-    model.currentBlock = block;
+  // model.createBlock = function(){
+  //   var block = new Block();
+  //   model.blocks.push(block);
+  //   model.currentBlock = block;
 
-    console.log(model.currentBlock);
-  };
+  //   console.log(model.currentBlock);
+  // };
 
   model.sampleBlocks = {
     1: { blocks: [0x0F00, 0x2222, 0x00F0, 0x4444], color: 'cyan'   },

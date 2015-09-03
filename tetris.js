@@ -10,8 +10,13 @@ Game.Renderer = (function(){
 
     Game.Model.createBlock();
     setInterval(function(){
+
       drawBg();
-      drawPiece(Game.Model.currentBlock.type, Game.Model.currentBlock.position.x, Game.Model.currentBlock.position.y, Game.Model.currentBlock.dir) 
+      // Game.Controller.NeedNewBlock();
+      for(var i = 0; i < Game.Model.blocks.length; i++){
+        drawPiece(Game.Model.blocks[i].type, Game.Model.blocks[i].position.x, Game.Model.blocks[i].position.y, Game.Model.blocks[i].dir, Game.Model.blocks[i].type.color) ;
+      }
+      // drawPiece(Game.Model.currentBlock.type, Game.Model.currentBlock.position.x, Game.Model.currentBlock.position.y, Game.Model.currentBlock.dir, Game.Model.currentBlock.type.color);
     }
     , 100)
   }
@@ -32,8 +37,8 @@ Game.Renderer = (function(){
   };
 
 
-  function drawPiece(type, x, y, dir){
-    eachblock(type, x, y, dir, function(x,y){drawBlock( x, y, Game.Model.currentBlock.type.color);})
+  function drawPiece(type, x, y, dir, color){
+    eachblock(type, x, y, dir, function(x,y){drawBlock( x, y, color);})
 
   };
 
