@@ -12,13 +12,16 @@ Game.Controller = (function(){
   }
 
   function rotatePiece(){
-    console.log("rotated")
-    if (Game.Board.unoccupied(0, 0, 1)){
-      Game.Model.currentBlock.dir+=1
+
+    var initialDir = Game.Model.currentBlock.dir;
+      Game.Model.currentBlock.dir += 1;
+
       if (Game.Model.currentBlock.dir>3) {
-        Game.Model.currentBlock.dir=0
-      } 
-    }
+        Game.Model.currentBlock.dir=0;
+      }
+      if (Game.Board.occupied(0, 0, 0) ){
+        Game.Model.currentBlock.dir = initialDir;
+      }
     
   }
 
@@ -30,14 +33,22 @@ Game.Controller = (function(){
   }
 
   function moveDown(){
-    console.log("down pressed")
-    if (Game.Board.unoccupied(0, 0, 1)){
+
+    if (Game.Board.unoccupied(0, Game.Renderer.canvas.height()*0.2/4, 0)){
       Game.Model.currentBlock.position.y += (Game.Renderer.canvas.height()*0.2)/4;
+    }
+    NeedNewBlock();
+  }
+
+  function NeedNewBlock(){
+    if(Game.Board.needNewBlock){
+      Game.Model.createBlock();
+      Game.Board.needNewBlock = false;
     }
   }
   
 
-  var score = 0
+  var score = 0;
   var keys = {  
                 37: moveLeft,
                 38: rotatePiece,
@@ -51,7 +62,9 @@ Game.Controller = (function(){
         keys[e.keyCode]();
       }
 
-    })
+    });
+
+
   }
 
   return{
