@@ -12,6 +12,7 @@ Game.Controller = (function(){
   }
 
   function rotatePiece(){
+    console.log("rotated")
     if (Game.Board.unoccupied(0, 0, 1)){
       Game.Model.currentBlock.dir+=1
       if (Game.Model.currentBlock.dir>3) {
@@ -29,6 +30,7 @@ Game.Controller = (function(){
   }
 
   function moveDown(){
+    console.log("down pressed")
     if (Game.Board.unoccupied(0, 0, 1)){
       Game.Model.currentBlock.position.y += (Game.Renderer.canvas.height()*0.2)/4;
     }

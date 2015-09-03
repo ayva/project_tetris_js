@@ -14,8 +14,8 @@ Game.Board = (function(){
     var result = false;
 
     Game.Renderer.eachblock(type, x, y, dir, function(x, y) {
-      console.log(x, y)
-      console.log(result)
+      console.log(x, y, result)
+
       if ((x < 0) || (x >= 400)  || (y > 700)){
         result = true;
       }

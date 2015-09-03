@@ -42,7 +42,7 @@ Game.Renderer = (function(){
       var bit, result, row = 0, col = 0, blocks = type.blocks[dir];
       for(bit = 0x8000 ; bit > 0 ; bit = bit >> 1) {
         if (blocks & bit) {
-          fn(x + col*(canvas.width()*0.4)/4, y + row*(canvas.height()*0.2)/4);
+          fn(x + col*(1+(canvas.width()*0.4)/4), y + (1+row*(canvas.height()*0.2)/4));
         }
         if (++col === 4) {
           col = 0;
