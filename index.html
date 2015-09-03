@@ -2,12 +2,29 @@
 <html lang="en">
 <head>
     <link rel="stylesheet" href="tetris.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
   <meta charset="UTF-8">
   <title>Document</title>
 </head>
 <body>
+  
+  <div class="container-fluid">
+    <div class="row">
+      <div id='score'></div>
+      <div id='gameover'></div>
+    </div>
+    <div class="row">
+      <div class="col-md-3 col-md-offset-3 col-sm-6 col-sm-offset-3 col-xs-6 col-xs-offset-3">
+        <button id="start" class="btn btn-success" type="submit">Start game</button>
+      </div>
+    </div>
 
-  <canvas id="canvas" width="400", height="700"></canvas>
+
+    <div class = "center">
+      <canvas id="canvas" width="400", height="700"></canvas>
+    </div>
+
+  </div>
 
   <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
   <script src="jcanvas.min.js"></script>

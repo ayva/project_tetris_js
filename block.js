@@ -15,7 +15,15 @@ Game.Model = (function(){
 
     this.type = model.takeSampleBlock(Math.ceil(Math.random()*7));
   }
+  Block.prototype.nextdir = function(){
+    (this.dir+1>3) ? this.dir=0 : this.dir+=1
+  }
 
+  Block.prototype.prevdir = function(){
+    (this.dir-1<0) ? this.dir=3 : this.dir-=1
+  }
+
+  
   var model = {};
   
   model.blocks = [];
@@ -24,9 +32,8 @@ Game.Model = (function(){
   model.createBlock = function(){
     var block = new Block();
     model.blocks.push(block);
-    console.log(model.blocks);
     model.currentBlock = block;
-    console.log("called create block");
+    Game.Controller.score += 4
   };
 
   model.sampleBlocks = {

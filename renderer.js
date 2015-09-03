@@ -4,26 +4,43 @@ var Game = Game || {};
 Game.Renderer = (function(){
  
   var canvas = $("#canvas");
+  var blockwidth = canvas.width()*0.4/4;
+  var blockheight = canvas.height()*0.2/4;
+  var motion = undefined;
+  var rendering = undefined;
 
   function init(){
 
-
     Game.Model.createBlock();
-    setInterval(function(){
 
+
+    //Rendering setup
+    Game.Renderer.rendering = setInterval(function(){
       drawBg();
-
-      for(var i = 0; i < Game.Model.blocks.length; i++){
-        drawPiece(Game.Model.blocks[i].type, Game.Model.blocks[i].position.x, Game.Model.blocks[i].position.y, Game.Model.blocks[i].dir, Game.Model.blocks[i].type.color) ;
+      drawShapes();
+      drawScore();
+      //Stop intervals if game is over
+      if(Game.Controller.gameOver()){
+        window.clearInterval(Game.Renderer.rendering);
+        window.clearInterval(Game.Renderer.motion);
       }
-
-    }
-    , 100)
+    }, 100)
+    //Auto drop setup
+    Game.Renderer.motion = setInterval(function(){
+      Game.Controller.moveDown();
+    },1000)
   }
   
+  function drawScore(){
+    $("#score").text("Score: " + Game.Controller.score)
+  }
 
-  //var ctx = canvas[0].getContext("2d");
-
+  
+  function drawShapes(){
+    for(var i = 0; i < Game.Model.blocks.length; i++){
+      drawPiece(Game.Model.blocks[i]) ;
+    }
+  }
 
   function drawBg(){
     canvas.drawRect({
@@ -36,25 +53,17 @@ Game.Renderer = (function(){
     });
   };
 
-
-  function drawPiece(type, x, y, dir, color){
-    eachblock(type, x, y, dir, function(x,y){drawBlock( x, y, color);})
+  function drawPiece(block){
+    if(!block.position) return "No blocks to render"
+    var type = block.type
+    var x = block.position.x
+    var y = block.position.y
+    var dir = block.dir
+    var color = block.type.color
+    
+    eachblock(type, x, y, dir, function(x,y){drawBlock(x, y, color);})
 
   };
-
-  function eachblock(type, x, y, dir, fn) {
-     
-      var bit, result, row = 0, col = 0, blocks = type.blocks[dir];
-      for(bit = 0x8000 ; bit > 0 ; bit = bit >> 1) {
-        if (blocks & bit) {
-          fn(x + col*((canvas.width()*0.4)/4), y + (row*(canvas.height()*0.2)/4));
-        }
-        if (++col === 4) {
-          col = 0;
-          ++row;
-        }
-      }
-    };
 
   function drawBlock(x,y,color){
    
@@ -64,11 +73,25 @@ Game.Renderer = (function(){
       fillStyle: color,
       x: x,
       y: y,
-      width:  (canvas.width()*0.4)/4,
-      height: (canvas.height()*0.2)/4,
+      width:  blockwidth,
+      height: blockheight,
       fromCenter: false,
     });
   };
+
+  function eachblock(type, x, y, dir, fn) {  
+      var bit, result, row = 0, col = 0, blocks = type.blocks[dir];
+      for(bit = 0x8000 ; bit > 0 ; bit = bit >> 1) {
+        if (blocks & bit) {
+          fn(x + col*blockwidth, y + row*blockheight);
+        }
+        if (++col === 4) {
+          col = 0;
+          ++row;
+        }
+      }
+    };
+
 
   return {
     canvas: canvas,
@@ -76,16 +99,11 @@ Game.Renderer = (function(){
     drawPiece: drawPiece,
     drawBlock: drawBlock,
     drawBg: drawBg,
-    eachblock: eachblock
+    eachblock: eachblock,
+    motion: motion,
+    rendering: rendering,
   };
 })();
 
-//var renderer = new renderer();
-$(document).ready(function(){
-    //Draw Board and piece
-    Game.Renderer.init();
-    //Start listener
-    Game.Controller.init();
-  })
 
 
