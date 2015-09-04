@@ -20,7 +20,7 @@ Game.Controller = (function(){
               };
 
   function init(){
-    $(document).keydown(function(e){
+    $(window).keydown(function(e){
       if (keys[e.keyCode]){
         keys[e.keyCode]();
       }
@@ -82,8 +82,12 @@ Game.Controller = (function(){
       //Record blocks coord as taken
       Game.Board.addCoord(Game.Model.currentBlock);
       //Check if bottom is full
-      while(Game.Board.checkBottom()){
-        Game.Board.shiftBlocksDown();
+      // while(Game.Board.checkBottom()){
+      //   Game.Board.shiftBlocksDown();
+      // }
+      console.log("Full row" +Game.Board.fullRow())
+      while(Game.Board.fullRow()){
+        Game.Board.shiftLines();
       }
       //Create a new block and make it current
       Game.Model.createBlock();
@@ -94,17 +98,17 @@ Game.Controller = (function(){
     }
   }
 
-  var currentCoord = function(block){
-    //Walks through each block in shape and records coords for occupied blocks
-    var type = block.type
-    var x = block.position.x
-    var y = block.position.y
-    var dir = block.dir
-    Game.Renderer.eachblock(type, x, y, dir, function(x,y){
-      console.log("Current coord "+ x,y)
-    })
+  // var currentCoord = function(block){
+  //   //Walks through each block in shape and records coords for occupied blocks
+  //   var type = block.type
+  //   var x = block.position.x
+  //   var y = block.position.y
+  //   var dir = block.dir
+  //   Game.Renderer.eachblock(type, x, y, dir, function(x,y){
+  //     console.log("Current coord "+ x,y)
+  //   })
 
-  }
+  // }
 
   var gameOver = function(){
     if(occupied(0,0)){

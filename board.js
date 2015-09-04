@@ -29,7 +29,7 @@ Game.Board = (function(){
     var y = block.position.y
     var dir = block.dir
     eachblock(type, x, y, dir, function(x,y){
-      field.push([x,y])
+      field.push([x,y,type.color])
     })
 
   }
@@ -55,6 +55,77 @@ Game.Board = (function(){
         }
       })
       return result
+  }
+
+  //Check all rows in canvas and shift everything above
+
+  function fullRow(){
+    var c = 0
+    for(var y=Game.Renderer.canvas.height()-blockheight; y>0; y-=blockheight){
+      c = 0
+      for(var x=0; x<Game.Renderer.canvas.width(); x+=blockwidth){
+      //Loop through taken blocks and count bottom one
+        for(var b=0; b<field.length; b++){
+          if (field[b][0]===x && field[b][1]===y) {
+            c++
+          }
+        }
+      }
+      //Only for full rows
+      if (c===10) {console.log("For y " + y); return true}
+    }
+    return false
+  }
+
+  function shiftLines(){
+    var count = 0
+    var updatedField = []
+    for(var y=Game.Renderer.canvas.height()-blockheight; y>0; y-=blockheight){
+      //Check row
+      count = 0
+      for(var x=0; x<Game.Renderer.canvas.width(); x+=blockwidth){
+      //Loop through taken blocks and count bottom one
+        for(var b=0; b<field.length; b++){
+          if (field[b][0]===x && field[b][1]===y) {
+            count++
+          }
+        }
+      }
+      //Only for full rows
+      
+      if (count===10) {
+        updatedField = []
+
+        for(var b=0; b<field.length; b++){
+          if (field[b][1]>y){
+            updatedField.push(field[b])
+            } else if (field[b][1]<y){
+            field[b][1]+=blockheight;
+            updatedField.push(field[b])
+            }
+          }
+          field = updatedField;
+
+          //Update blocks
+          var updatedBlocks = []
+          Game.Model.blocks.forEach(function(element, index){
+            if(element.position.y<y){
+              element.position.y+=blockheight
+            }
+            //Whole block is under bottom
+            if(BlockVisible(element)){
+              updatedBlocks.push(element)
+            }
+          })
+          //Alternative score when counting only vanished
+          //Game.Controller.score += (Game.Model.blocks.length-updatedBlocks.length);
+          
+          Game.Model.blocks = updatedBlocks
+
+
+      }
+      
+    }
   }
 
   //All occupied blockes stored in field
@@ -117,6 +188,8 @@ Game.Board = (function(){
     field:field,
     checkBottom: checkBottom,
     shiftBlocksDown: shiftBlocksDown,
+    shiftLines: shiftLines,
+    fullRow: fullRow,
 
     getField: function(){ return field },
     

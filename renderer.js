@@ -17,7 +17,8 @@ Game.Renderer = (function(){
     //Rendering setup
     Game.Renderer.rendering = setInterval(function(){
       drawBg();
-      drawShapes();
+      //drawShapes();
+      drawField();
       drawScore();
       //Stop intervals if game is over
       if(Game.Controller.gameOver()){
@@ -39,6 +40,18 @@ Game.Renderer = (function(){
   function drawShapes(){
     for(var i = 0; i < Game.Model.blocks.length; i++){
       drawPiece(Game.Model.blocks[i]) ;
+    }
+  }
+
+  function drawField(){
+    drawPiece(Game.Model.currentBlock);
+    
+    var f= Game.Board.getField()
+    for(var i = 0; i < f.length; i++){
+      var x=f[i][0]
+      var y=f[i][1]
+      var color=f[i][2]
+      drawBlock(x,y,color)
     }
   }
 
